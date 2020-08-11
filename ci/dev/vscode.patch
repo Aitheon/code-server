@@ -847,7 +847,7 @@ index 0000000000000000000000000000000000000000..3c0703b7174ad792a4b42841e96ee937
 +
 +	if (parent) {
 +		// Tell the parent loading has completed.
-+		parent.postMessage({ event: 'loaded' }, window.location.origin);
++		parent.postMessage({ event: 'loaded' }, '*');
 +
 +		// Proxy or stop proxing events as requested by the parent.
 +		const listeners = new Map<string, (event: Event) => void>();
@@ -865,7 +865,7 @@ index 0000000000000000000000000000000000000000..3c0703b7174ad792a4b42841e96ee937
 +					parent.postMessage({
 +						event: parentEvent.data.event,
 +						[parentEvent.data.prop]: event[parentEvent.data.prop as keyof Event]
-+					}, window.location.origin);
++					}, '*');
 +				};
 +				listeners.set(parentEvent.data.bind, listener);
 +				document.addEventListener(parentEvent.data.bind, listener);
