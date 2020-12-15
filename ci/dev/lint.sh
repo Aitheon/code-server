@@ -7,10 +7,15 @@ main() {
   eslint --max-warnings=0 --fix $(git ls-files "*.ts" "*.tsx" "*.js")
   stylelint $(git ls-files "*.css")
   tsc --noEmit
-  # See comment in ./ci/image/debian8
-  if [[ ! ${CI-} ]]; then
-    shellcheck -e SC2046,SC2164,SC2154,SC1091,SC1090,SC2002 $(git ls-files "*.sh")
+  shellcheck -e SC2046,SC2164,SC2154,SC1091,SC1090,SC2002 $(git ls-files "*.sh")
+  if command -v helm && helm kubeval --help > /dev/null; then
+    helm kubeval ci/helm-chart
   fi
+
+  cd lib/vscode
+  # Run this periodically in vanilla VS code to make sure we don't add any more warnings.
+  yarn eslint --max-warnings=3
+  cd "$OLDPWD"
 }
 
 main "$@"
